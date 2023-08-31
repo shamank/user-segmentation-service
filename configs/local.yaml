@@ -1,0 +1,18 @@
+env: "local"
+
+http-server:
+  host: "localhost"
+  port: 8000
+  writeTimeout: 10s
+  readTimeout: 10s
+  maxHeaderMegabytes: 1
+
+postgres:
+  host: "localhost"
+  port: 5432
+  user: "pguser"
+  db: "devdb"
+  ssl: disable
+
+
+user-logs-dir: "./assets/user_logs/"
