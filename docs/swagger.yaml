@@ -2,8 +2,12 @@ basePath: /api/v1/
 definitions:
   v1.addUserToSegmentsRequest:
     type: object
-  v1.createSegmentInput:
+  v1.createSegmentRequest:
     properties:
+      assign_percentage:
+        maximum: 100
+        minimum: 0
+        type: integer
       slug:
         type: string
     required:
@@ -28,6 +32,24 @@ definitions:
       message:
         type: string
       status:
+        type: string
+    type: object
+  v1.getUserHistoryRequest:
+    properties:
+      end_date:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - end_date
+    - start_date
+    - user_id
+    type: object
+  v1.getUserHistoryResponse:
+    properties:
+      url:
         type: string
     type: object
   v1.getUserSegmentsResponse:
@@ -114,7 +136,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/v1.createSegmentInput'
+          $ref: '#/definitions/v1.createSegmentRequest'
       produces:
       - application/json
       responses:
@@ -170,6 +192,44 @@ paths:
           schema:
             $ref: '#/definitions/v1.errorResponse'
       summary: Get Segment
+      tags:
+      - segments
+  /user/history:
+    post:
+      consumes:
+      - application/json
+      description: get user segments history
+      parameters:
+      - description: user history
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.getUserHistoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getUserHistoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Get User History
       tags:
       - segments
   /users:

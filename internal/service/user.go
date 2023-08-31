@@ -22,10 +22,6 @@ func NewUserService(repo repository.User, logger *slog.Logger) *UserService {
 
 func (s *UserService) GetRandomUsers(assignPercentage int) ([]entity.User, error) {
 
-	//percentageAsFloat := float32(assignPercentage) / 100.0
-	//
-	//percentageAsFloat = Round(percentageAsFloat, 2)
-
 	return s.repo.GetRandomUsers(assignPercentage)
 }
 

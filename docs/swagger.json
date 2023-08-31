@@ -29,7 +29,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.createSegmentInput"
+                            "$ref": "#/definitions/v1.createSegmentRequest"
                         }
                     }
                 ],
@@ -141,6 +141,64 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/v1.statusResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/history": {
+            "post": {
+                "description": "get user segments history",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "segments"
+                ],
+                "summary": "Get User History",
+                "parameters": [
+                    {
+                        "description": "user history",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.getUserHistoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.getUserHistoryResponse"
                         }
                     },
                     "400": {
@@ -457,12 +515,17 @@
         "v1.addUserToSegmentsRequest": {
             "type": "object"
         },
-        "v1.createSegmentInput": {
+        "v1.createSegmentRequest": {
             "type": "object",
             "required": [
                 "slug"
             ],
             "properties": {
+                "assign_percentage": {
+                    "type": "integer",
+                    "maximum": 100,
+                    "minimum": 0
+                },
                 "slug": {
                     "type": "string"
                 }
@@ -497,6 +560,33 @@
                     "type": "string"
                 },
                 "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.getUserHistoryRequest": {
+            "type": "object",
+            "required": [
+                "end_date",
+                "start_date",
+                "user_id"
+            ],
+            "properties": {
+                "end_date": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "v1.getUserHistoryResponse": {
+            "type": "object",
+            "properties": {
+                "url": {
                     "type": "string"
                 }
             }
