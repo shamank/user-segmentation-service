@@ -52,7 +52,6 @@ func (r *SegmentRepo) GetSegmentBySlug(slug string) (entity.Segment, error) {
 	if err := r.db.QueryRow(query, slug).Scan(
 		&segment.Id,
 		&segment.Slug,
-		&segment.AssignPercentage,
 		&segment.CreatedAt,
 		&segment.DeletedAt,
 	); err != nil {
@@ -95,7 +94,6 @@ func (r *SegmentRepo) GetSegmentsBySlug(slugs []string) ([]entity.Segment, error
 		if err := rows.Scan(
 			&segment.Id,
 			&segment.Slug,
-			&segment.AssignPercentage,
 			&segment.CreatedAt,
 			&segment.DeletedAt); err != nil {
 			return nil, err

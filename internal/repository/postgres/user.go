@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/shamank/user-segmentation-service/internal/entity"
 	"time"
 )
 
@@ -16,6 +17,37 @@ func NewUserRepo(db *sql.DB) *UserRepo {
 	return &UserRepo{
 		db: db,
 	}
+}
+
+func (r *UserRepo) GetRandomUsers(percentage int) ([]entity.User, error) {
+
+	fmt.Println("percentage: ", percentage)
+
+	query := `select id, username from users order by random() limit (select  round(count(id) * $1 / 100) from users)`
+
+	rows, err := r.db.Query(query, percentage)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println("ROWS: ", rows)
+
+	users := make([]entity.User, 0)
+
+	for rows.Next() {
+		var user entity.User
+
+		if err := rows.Scan(
+			&user.Id,
+			&user.Username,
+		); err != nil {
+			return nil, err
+		}
+		fmt.Println("USER: ", user)
+		users = append(users, user)
+	}
+	return users, nil
+
 }
 
 func (r *UserRepo) CreateUser(username string) (int, error) {

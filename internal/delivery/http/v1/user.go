@@ -89,7 +89,7 @@ type getUserSegmentsResponse struct {
 // @Summary Get User Segments
 // @Tags users
 // @Description get user segments
-// @ModuleID userGetProfile
+// @ModuleID getUserSegments
 // @Accept  json
 // @Produce  json
 // @Param user_id query string true "user id"
@@ -212,6 +212,18 @@ type getUserHistoryResponse struct {
 	URL string `json:"url"`
 }
 
+// @Summary Get User History
+// @Tags segments
+// @Description get user segments history
+// @ModuleID getUserHistory
+// @Accept  json
+// @Produce  json
+// @Param input body getUserHistoryRequest true "user history"
+// @Success 200 {object} getUserHistoryResponse
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /user/history [post]
 func (h *HandlerV1) getUserHistory(c *gin.Context) {
 	const op = "http.v1.user.getUserHistory"
 	logger := h.logger.With(slog.String("op", op))

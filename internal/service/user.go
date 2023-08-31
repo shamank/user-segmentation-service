@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/shamank/user-segmentation-service/internal/entity"
 	"github.com/shamank/user-segmentation-service/internal/repository"
 	"log/slog"
 	"time"
@@ -17,6 +18,15 @@ func NewUserService(repo repository.User, logger *slog.Logger) *UserService {
 		repo:   repo,
 		logger: logger,
 	}
+}
+
+func (s *UserService) GetRandomUsers(assignPercentage int) ([]entity.User, error) {
+
+	//percentageAsFloat := float32(assignPercentage) / 100.0
+	//
+	//percentageAsFloat = Round(percentageAsFloat, 2)
+
+	return s.repo.GetRandomUsers(assignPercentage)
 }
 
 func (s *UserService) CreateUser(username string) (int, error) {

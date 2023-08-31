@@ -20,6 +20,7 @@ type Segment interface {
 
 type User interface {
 	CreateUser(username string) (int, error)
+	GetRandomUsers(percentage int) ([]entity.User, error)
 
 	GetUserSegments(userId int) ([]string, error)
 	AddUserToSegments(userID int, segments []int, endAt *time.Time) error

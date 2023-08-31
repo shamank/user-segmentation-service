@@ -17,6 +17,7 @@ type Segment interface {
 
 type User interface {
 	CreateUser(username string) (int, error)
+	GetRandomUsers(percentage int) ([]entity.User, error)
 
 	AddUserToSegments(userId int, segmentsIds []int, endAt *time.Time) error
 	RemoveUserFromSegments(userId int, segmentsIds []int) error
@@ -28,6 +29,7 @@ type UserSegment interface {
 	AddUserToSegments(userId int, slugs []string, expire *time.Duration) error
 	RemoveUserFromSegments(userId int, slugs []string) error
 	GetUserSegmentHistory(userID int, startDate time.Time, endDate time.Time) (string, error)
+	SetSegmentToRandomUsers(segmentSlug string, percentage int) error
 }
 
 type Services struct {

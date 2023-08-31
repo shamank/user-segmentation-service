@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"github.com/shamank/user-segmentation-service/internal/repository"
 	"time"
 )
@@ -119,4 +120,25 @@ func (s *UserSegmentService) GetUserSegmentHistory(userID int, startDate time.Ti
 	}
 
 	return file, nil
+}
+
+func (s *UserSegmentService) SetSegmentToRandomUsers(segmentSlug string, percentage int) error {
+
+	users, err := s.userService.GetRandomUsers(percentage)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("USERS: ", users)
+
+	for _, user := range users {
+		fmt.Println(user.Id)
+		err := s.AddUserToSegments(user.Id, []string{segmentSlug}, nil)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+
 }

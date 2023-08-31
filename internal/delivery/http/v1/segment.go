@@ -34,8 +34,9 @@ func (h *HandlerV1) getSegment(c *gin.Context) {
 
 }
 
-type createSegmentInput struct {
-	Slug string `json:"slug" binding:"required,slug"`
+type createSegmentRequest struct {
+	Slug             string `json:"slug" binding:"required,slug"`
+	AssignPercentage int    `json:"assign_percentage" binding:"gte=0,lte=100"`
 }
 
 // @Summary Create Segment
@@ -44,7 +45,7 @@ type createSegmentInput struct {
 // @ModuleID createSegment
 // @Accept  json
 // @Produce  json
-// @Param input body createSegmentInput true "create segment"
+// @Param input body createSegmentRequest true "create segment"
 // @Success 200 {object} statusResponse
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
@@ -54,7 +55,7 @@ func (h *HandlerV1) createSegment(c *gin.Context) {
 	const op = "http.v1.segment.createSegment"
 	logger := h.logger.With(slog.String("op", op))
 
-	var input createSegmentInput
+	var input createSegmentRequest
 
 	if err := c.BindJSON(&input); err != nil {
 		logger.Error("problem with bind json", sl.Err(err))
@@ -67,7 +68,14 @@ func (h *HandlerV1) createSegment(c *gin.Context) {
 		logger.Error("problem createElement", sl.Err(err))
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
+	}
 
+	if input.AssignPercentage > 0 {
+		if err := h.services.UserSegment.SetSegmentToRandomUsers(input.Slug, input.AssignPercentage); err != nil {
+			logger.Error("problem SetSegmentToRandomUsers", sl.Err(err))
+			newErrorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, map[string]string{

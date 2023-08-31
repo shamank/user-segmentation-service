@@ -6,14 +6,12 @@ create table users
 
 create table segments
 (
-    id                serial primary key,
+    id         serial primary key,
 
-    slug              varchar(255) not null,
+    slug       varchar(255) not null,
 
-    assign_percentage int       default 0,
-
-    created_at        timestamp default current_timestamp,
-    deleted_at        timestamp
+    created_at timestamp default current_timestamp,
+    deleted_at timestamp
 );
 
 create table user_segment
@@ -27,7 +25,7 @@ create table user_segment
 
     foreign key (segment_id) references segments (id),
 
-    unique (user_id, segment_id)
+    unique (user_id, segment_id, end_at)
 );
 
 create type operation_type as enum ('grant', 'revoke');
